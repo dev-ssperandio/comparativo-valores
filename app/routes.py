@@ -3,6 +3,7 @@ from flask import request, render_template
 import subprocess
 import sqlite3
 from app.scraping.database import create_connection
+from app.scraping.scraper import scrape_data
 
 @app.route('/')
 def index():
@@ -22,8 +23,14 @@ def search():
         message_type = "error"
         return render_template('index.html', message=message, message_type=message_type)
 
-    python_path = r'C:\Users\badi_\Documents\comparativo-valores\env\Scripts\python.exe'
-    subprocess.run([python_path, 'app/scraping/scraper.py', query, quantity])
+
+    # Removido devido caminho fixo.
+    # python_path = r'C:\Users\badi_\Documents\comparativo-valores\env\Scripts\python.exe'
+    # subprocess.run([python_path, 'app/scraping/scraper.py', query, quantity])
+
+    # Inclusa chamada da função no mesmo processo
+    scrape_data(query, quantity)
+
     database = "database/database.db"
     conn = create_connection(database)
     cur = conn.cursor()
